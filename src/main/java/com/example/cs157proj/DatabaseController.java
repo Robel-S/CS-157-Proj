@@ -11,6 +11,7 @@ public class DatabaseController {
                 Statement statement = connection.createStatement();
                 String createTable = "CREATE TABLE IF NOT EXISTS movie (movieID INTEGER PRIMARY KEY, title VARCHAR(50), genre VARCHAR(50))";
                 statement.executeUpdate(createTable);
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
