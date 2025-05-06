@@ -1,5 +1,4 @@
-package com.example.cs157proj;
-import com.example.cs157proj.model.ConnectDB;
+package com.example.cs157proj.model;
 import java.sql.*;
 
 public class DatabaseController {

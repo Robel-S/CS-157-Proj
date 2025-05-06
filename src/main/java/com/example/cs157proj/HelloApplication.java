@@ -8,19 +8,26 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private Scene startScene;
+
+    private Scene mainScene;
+    private Scene idScene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Scene scene = getStartScene();
+        Scene scene = getIDScene();
         stage.setTitle("FilmBox!");
         stage.setScene(scene);
         stage.show();
     }
-    public Scene getStartScene() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        startScene= new Scene(fxmlLoader.load(), 600, 400);
-        return startScene;
+    public Scene getMainScene() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-page.fxml"));
+        mainScene = new Scene(fxmlLoader.load(), 600, 400);
+        return mainScene;
+    }
+    public Scene getIDScene() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("id-page.fxml"));
+        idScene = new Scene(fxmlLoader.load(), 600, 400);
+        return idScene;
     }
     public static void main(String[] args) {
         launch();

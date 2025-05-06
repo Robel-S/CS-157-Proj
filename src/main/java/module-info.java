@@ -6,4 +6,8 @@ module com.example.cs157proj {
 
     opens com.example.cs157proj to javafx.fxml;
     exports com.example.cs157proj;
+    exports com.example.cs157proj.fxmlControllers;
+    opens com.example.cs157proj.fxmlControllers to javafx.fxml;
+    exports com.example.cs157proj.model;
+    opens com.example.cs157proj.model to javafx.fxml;
 }
