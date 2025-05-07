@@ -22,24 +22,42 @@ public class DatabaseController {
                  createTable(customerTable);
                  createTable(rentalTable);
                  createTable(ratingTable);
-
+                 String m1 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
+                         "VALUES (12345, 'Thunderbolts', 'Action', 3, 5.0)";
+                String m2 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
+                        "VALUES (23456, 'Sinners', 'Horror', 2, 5.0)";
+                String m3 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
+                        "VALUES (34567, 'Wicked', 'Fantasy', 4, 4.5)";
+                String m4 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
+                        "VALUES (45678, 'Ted', 'Comedy', 2, 3.0)";
+                String m5 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
+                        "VALUES (56789, 'La La Land', 'Romance', 1, 5.0)";
+                insertMovie(m1);
+                insertMovie(m2);
+                insertMovie(m3);
+                insertMovie(m4);
+                insertMovie(m5);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
-    public void createTable(String createTable) {
+    public void createTable(String createTable) { //use statement to create table from SQL statement in string
         try {
-            statement.executeUpdate(createTable); //use statement to create table from SQL statement in string
+            statement.executeUpdate(createTable);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
-    public void insertMovie(String title, String genre, int stock, int avgRating) {
-
+    public void insertMovie(String insertMovie) { //use statement to insert into movie table using SQL statement from string
+       try{
+           statement.executeUpdate(insertMovie);
+       } catch (SQLException e) {
+           throw new RuntimeException(e);
+       }
     }
-    public void insertCustomer(String title, String genre, int stock, int avgRating) {
+    public void insertCustomer(String insertCustomer) {
 
     }
 }

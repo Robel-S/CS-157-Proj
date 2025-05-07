@@ -10,4 +10,5 @@ module com.example.cs157proj {
     opens com.example.cs157proj.fxmlControllers to javafx.fxml;
     exports com.example.cs157proj.model;
     opens com.example.cs157proj.model to javafx.fxml;
+    opens com.example.cs157proj.dataObjects to javafx.base;
 }

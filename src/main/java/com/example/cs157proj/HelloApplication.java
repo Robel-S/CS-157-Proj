@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         DatabaseController main = new DatabaseController();
-        Scene scene = getIDScene();
+        Scene scene = getMainScene();
         stage.setTitle("FilmBox!");
         stage.setScene(scene);
         stage.show();
