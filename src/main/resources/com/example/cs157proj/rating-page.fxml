@@ -5,10 +5,36 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.cs157proj.RatingPage"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.cs157proj.fxmlControllers.ratingController"
+            prefWidth="600" prefHeight="400">
+
+    <VBox spacing="15" alignment="CENTER" layoutX="100" layoutY="50" prefWidth="400">
+        <Label text="Rate a Movie" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <!-- Text field for entering the movie title -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Movie Title:" />
+            <TextField fx:id="movieTitleField" promptText="Enter movie title" prefWidth="200" />
+        </HBox>
+
+        <!-- Spinner for selecting a rating from 1 to 5 -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Rating (1–5):" />
+            <Spinner fx:id="ratingSpinner" prefWidth="100" />
+        </HBox>
+
+        <!-- Submit button -->
+        <Button fx:id="submitButton"
+                text="Submit Rating"
+                onAction="#handleSubmitRating"
+                prefWidth="150"
+                style="-fx-background-color: #5DADE2; -fx-text-fill: white;" />
+    </VBox>
 
 </AnchorPane>
+
+
