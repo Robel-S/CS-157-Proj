@@ -37,6 +37,7 @@ public class mainPageController implements Initializable
     private DataHandler dataHandler;
     private ArrayList<Movie> movies;
     private ArrayList<String> genres;
+    private FilteredList<Movie> filteredMovies;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -48,7 +49,9 @@ public class mainPageController implements Initializable
         movies = dataHandler.loadMovies();
         genres = dataHandler.loadGenres();
         loadMovies();
+        filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         loadGenres();
+        genreFilter();
     }
     public void loadMovies(){
 
@@ -60,7 +63,6 @@ public class mainPageController implements Initializable
         genreFilter.setValue("Choose Genre");
     }
     public void searchMovies(){
-        FilteredList<Movie> filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredMovies.setPredicate(movie -> {
                 if(newValue == null || newValue.isEmpty())
@@ -74,7 +76,7 @@ public class mainPageController implements Initializable
         movieTable.setItems(filteredMovies);
     }
     public void genreFilter(){
-        FilteredList<Movie> filteredGenres = new FilteredList<>(FXCollections.observableArrayList(movies));
+        FilteredList<Movie> filteredGenres = new FilteredList<Movie>(FXCollections.observableArrayList(filteredMovies));
         genreFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue.equals("Choose Genre"))
                 filteredGenres.setPredicate(p-> true);
