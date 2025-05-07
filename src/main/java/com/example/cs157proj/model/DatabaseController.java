@@ -10,10 +10,10 @@ public class DatabaseController {
         if (connection != null) { //if the database is connected create movie, customer, rental, and rating tables
             try {
                  statement = connection.createStatement();
-                String movieTable = "CREATE TABLE IF NOT EXISTS movie (movieID INTEGER NOT NULL PRIMARY KEY, " +
+                String movieTable = "CREATE TABLE IF NOT EXISTS movie (movieID INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
                         "title VARCHAR(50), genre VARCHAR(50), stock INTEGER, avgRating DECIMAL (1,1))";
-                 String customerTable = "CREATE TABLE IF NOT EXISTS customer (customerID INTEGER NOT NULL PRIMARY KEY, " +
-                        "username VARCHAR(50), password VARCHAR(50), name VARCHAR(50), age INTEGER)";
+                 String customerTable = "CREATE TABLE IF NOT EXISTS customer (username VARCHAR(10) UNIQUE NOT NULL PRIMARY KEY, " +
+                        "password VARCHAR(50), name VARCHAR(50), age INTEGER)";
                  String rentalTable = "CREATE TABLE IF NOT EXISTS rental (customerID INTEGER NOT NULL, " +
                          "movieID INTEGER NOT NULL, dueDate VARCHAR(50), PRIMARY KEY (customerID, movieID))";
                 String ratingTable = "CREATE TABLE IF NOT EXISTS rating (customerID INTEGER NOT NULL, " +
