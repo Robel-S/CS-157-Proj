@@ -9,7 +9,7 @@ public class ConnectDB {
         final String dbName = "jdbc:sqlite:RentalDB.db";
         try{
             connection = DriverManager.getConnection(dbName);
-            System.out.println("Connected to databas    e");
+            System.out.println("Connected to database");
         } catch (SQLException e) {
             System.out.println("Error connecting to database");
             e.printStackTrace();

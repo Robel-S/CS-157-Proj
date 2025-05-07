@@ -1,5 +1,6 @@
 package com.example.cs157proj;
 
+import com.example.cs157proj.model.DatabaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        DatabaseController main = new DatabaseController();
         Scene scene = getIDScene();
         stage.setTitle("FilmBox!");
         stage.setScene(scene);

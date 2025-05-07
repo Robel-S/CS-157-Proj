@@ -29,10 +29,10 @@
       </Label>
       <TableView layoutY="191.0" prefHeight="210.0" prefWidth="600.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Title" />
-          <TableColumn prefWidth="75.0" text="Genre" />
-            <TableColumn prefWidth="75.0" text="Rating" />
-            <TableColumn prefWidth="75.0" text="Stock" />
+          <TableColumn prefWidth="265.60003662109375" text="Title" />
+          <TableColumn minWidth="0.0" prefWidth="192.79998779296875" text="Genre" />
+            <TableColumn prefWidth="77.5999755859375" text="Rating" />
+            <TableColumn prefWidth="64.0" text="Stock" />
         </columns>
       </TableView>
    </children>
