@@ -14,10 +14,10 @@ public class DatabaseController {
                         "title VARCHAR(50), genre VARCHAR(50), stock INTEGER, avgRating DECIMAL (1,1))";
                  String customerTable = "CREATE TABLE IF NOT EXISTS customer (username VARCHAR(10) UNIQUE NOT NULL PRIMARY KEY, " +
                         "password VARCHAR(50), name VARCHAR(50), age INTEGER)";
-                 String rentalTable = "CREATE TABLE IF NOT EXISTS rental (customerID INTEGER NOT NULL, " +
-                         "movieID INTEGER NOT NULL, dueDate VARCHAR(50), PRIMARY KEY (customerID, movieID))";
-                String ratingTable = "CREATE TABLE IF NOT EXISTS rating (customerID INTEGER NOT NULL, " +
-                        "movieID INTEGER NOT NULL, rating DECIMAL (1,1), PRIMARY KEY (customerID, movieID))";
+                 String rentalTable = "CREATE TABLE IF NOT EXISTS rental (username VARCHAR(10) NOT NULL, " +
+                         "movieID INTEGER NOT NULL, dueDate VARCHAR(50), PRIMARY KEY (username, movieID))";
+                String ratingTable = "CREATE TABLE IF NOT EXISTS rating (username VARCHAR(10) NOT NULL, " +
+                        "movieID INTEGER NOT NULL, rating DECIMAL (1,1), PRIMARY KEY (username, movieID))";
                  createTable(movieTable);
                  createTable(customerTable);
                  createTable(rentalTable);
