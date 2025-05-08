@@ -27,7 +27,7 @@ public class HelloApplication extends Application {
         return mainScene;
     }
     public Scene getWelcomeScene() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("welcome-page.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("rental-page.fxml"));
         mainScene = new Scene(fxmlLoader.load(), 600, 400);
         return mainScene;
     }

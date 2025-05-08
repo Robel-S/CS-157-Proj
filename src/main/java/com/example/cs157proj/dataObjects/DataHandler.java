@@ -2,14 +2,17 @@ package com.example.cs157proj.dataObjects;
 
 import com.example.cs157proj.model.ConnectDB;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DataHandler {
     private ConnectDB db;
     private Connection connection;
     private static Statement statement;
+    LocalDate date = LocalDate.now();
 
     public DataHandler() {
+        //connects to database then stores the connection and uses it to create a statement variable
         db = new ConnectDB();
         connection = db.getConnection();
         try {
@@ -23,9 +26,11 @@ public class DataHandler {
     public static ArrayList<Movie> loadMovies() {
         ArrayList<Movie> movies = new ArrayList<>();
         try {
+            //query to load all attributes from movie table in order by title attribute
             ResultSet resultSet = statement.executeQuery("SELECT * FROM movie ORDER BY title");
             while (resultSet.next()) {
-                int movieID = resultSet.getInt("movieID");
+                //each attribute gets put in a variable then stored in a movie object an added to a movie array
+                int movieID = resultSet.getInt("movieID"); //gets movieID column from current row
                 String movieTitle = resultSet.getString("title");
                 String genre = resultSet.getString("genre");
                 int stock = resultSet.getInt("stock");
@@ -33,8 +38,10 @@ public class DataHandler {
                 movies.add(new Movie(movieID, movieTitle, genre, stock, avgRating));
             }
         } catch (SQLException e) {
+            System.out.println("error loading movies");
             throw new RuntimeException(e);
         }
+        //returns array of movie objects
         return movies;
     }
 
@@ -42,11 +49,14 @@ public class DataHandler {
     public static ArrayList<String> loadGenres() {
         ArrayList<String> genres = new ArrayList<>();
         try {
+            //query to get all genres from movie table
             ResultSet resultSet = statement.executeQuery("SELECT genre FROM movie ORDER BY genre");
             while (resultSet.next()) {
+                //adds each genre to an arraylist one by one from resultSet
                 genres.add(resultSet.getString("genre"));
             }
         } catch (SQLException e) {
+            System.out.println("error loading genres");
             throw new RuntimeException(e);
         }
         return genres;
@@ -57,9 +67,8 @@ public class DataHandler {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
             while (resultSet.next()) {
                 int movieID = resultSet.getInt("movieID");
-                String user = resultSet.getString("username");
                 String dueDate = resultSet.getString("dueDate");
-                rentals.add(new Rental(user, movieID, dueDate));
+                rentals.add(new Rental(username, movieID, dueDate));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -74,11 +83,64 @@ public class DataHandler {
             throw new RuntimeException(e);
         }
     }
-    public static void rentalTitle(int movieID){
-
-
+    public boolean rentalExists(String username, int movieID){
+        String query = "SELECT * FROM rental WHERE username = ? AND movieID = ?";
+        try{
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setInt(2, movieID);
+            ResultSet rs = stmt.executeQuery();
+            if(!rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
+    public boolean insertRental(String username, int movieID){
+        String query = "INSERT INTO rental(username, movieID, dueDate) VALUES (?,?,?)";
+        String query2 = "UPDATE movie SET stock = stock - 1 WHERE movieID = ?";
+        LocalDate twoWeeks = date.plusWeeks(2);
+        try{
+            PreparedStatement stmt = connection.prepareStatement(query);
+            PreparedStatement stmt2 = connection.prepareStatement(query2);
+            stmt.setString(1, username);
+            stmt.setInt(2, movieID);
+            stmt.setString(3, twoWeeks.toString());
+            stmt2.setInt(1, movieID);
+            connection.setAutoCommit(false);
+            stmt.executeUpdate();
+            stmt2.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
 
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                return false;
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+    public String getRentalTitle(int movieID){
+        String query = "SELECT title FROM movie WHERE movieID = ?";
+        String title = "empty";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, movieID);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                title = rs.getString("title");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return title;
+    }
     // Method to add a new customer to the database
     public void addCustomer(Customer customer) {
         String sql = "INSERT INTO customer (username, password, name, age) VALUES (?, ?, ?, ?)";

@@ -7,9 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -32,6 +30,7 @@ public class SignUpController {
     public SignUpController() {
         dataHandler = new DataHandler();
     }
+    private final usernameHolder user = usernameHolder.getInstance();
 
     @FXML
     public void signUp() {
@@ -64,6 +63,9 @@ public class SignUpController {
 
         // Show a success message or navigate to the next screen (if needed)
         showSuccess("Account created successfully!");
+
+        //sets usernameController to signed-in username so it can be used in other pages
+        user.setUsername(username);
 
         // After successful sign-up, navigate to main-page.fxml
         try {

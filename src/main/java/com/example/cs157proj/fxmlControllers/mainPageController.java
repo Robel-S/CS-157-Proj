@@ -38,32 +38,41 @@ public class mainPageController implements Initializable
     private ArrayList<Movie> movies;
     private ArrayList<String> genres;
     private FilteredList<Movie> filteredMovies;
+    private final usernameHolder username = usernameHolder.getInstance();
 
-    @Override
+    @Override //on page start up table gets populated with the values from our movie databse
     public void initialize(URL location, ResourceBundle resources){
+        //creates data handler object to handle data from database
         dataHandler = new DataHandler();
+        //assigns each column an attribute to take in from the movie objects
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("avgRating"));
         stockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        movies = dataHandler.loadMovies();
-        genres = dataHandler.loadGenres();
         loadMovies();
         addButtons();
+        //creates a filteredList based on the ArrayList of movies
         filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         loadGenres();
         genreFilter();
+
     }
+    //loads arraylist of movies from database and gives them to the table
     public void loadMovies(){
         movies = dataHandler.loadMovies();
             movieTable.setItems(FXCollections.observableArrayList(movies));
     }
+    //loads arraylist of genres and puts them into our genreFilterBox
     public void loadGenres(){
-        genreFilter.getItems().clear();
-        genreFilter.getItems().addAll(genres);
+        genres = dataHandler.loadGenres();
+        genreFilter.setItems(FXCollections.observableArrayList(genres));
         genreFilter.getItems().addFirst("Choose Genre");
         genreFilter.setValue("Choose Genre");
     }
+    /*reads values inputted into the searchbar and compares the new value to the titles
+    * of the movies in the movie ArrayList and those that match get filtered into the filteredList
+    * and the table gets set to show the items in the filteredList
+     */
     public void searchMovies(){
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredMovies.setPredicate(movie -> {
@@ -77,6 +86,10 @@ public class mainPageController implements Initializable
         });
         movieTable.setItems(filteredMovies);
     }
+    /* whenever a genre is chosen in the genreFilter choicebox we compare that genre
+     * to the genres of the movies in our movieArrayList and those that match stay in the FilteredList
+     * then the table gets set to show the items in the filteredList
+     */
     public void genreFilter(){
         FilteredList<Movie> filteredGenres = new FilteredList<Movie>(FXCollections.observableArrayList(filteredMovies));
         genreFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -88,26 +101,45 @@ public class mainPageController implements Initializable
         });
         movieTable.setItems(filteredGenres);
     }
+    //code to add rent buttons to the last column of the table
     private void addButtons() {
+        //creates cell factory object that defines how the column is set up set up
+        //specifies that column will hold a movie object and wont display a specific datatype hence void
         Callback<TableColumn<Movie, Void>, TableCell<Movie, Void>> cellFactory = new Callback<>() {
+            //calls following code once for each row the table has
             @Override
             public TableCell<Movie, Void> call(final TableColumn<Movie, Void> param) {
+                //creates a table cell subclass that each has its own rent button
                 return new TableCell<>() {
                     private final Button rentBtn = new Button("Rent");
-
                     {
+                        //once the button is pressed it gets the movie object of the row the button is in
                         rentBtn.setOnAction(event -> {
                             Movie movie = getTableView().getItems().get(getIndex());
+                            /*checks if movie is out of stock then checks if user has already rented the movie
+                             if they have then an alert pops up, if not then insert rental method is called.
+                             */
                             if (movie.getStock() > 0) {
-                                rentBtn.setText("Rented");
-                                dataHandler.updateStock(movie.getMovieID());
-                                loadMovies();
+                                if(dataHandler.rentalExists(username.getUsername(), movie.getMovieID())) {
+                                    if(dataHandler.insertRental(username.getUsername(), movie.getMovieID())) {
+                                        rentBtn.setText("Rented");
+                                        alert("Rented " + movie.getTitle(), "rental succesful");
+                                    }
+                                    else {
+                                        alert("Was unable to rent movie", "Rental Failed");
+                                    }
+                                    loadMovies();
+                                }
+                                else{
+                                    alert("Already rented movie", "Rental Failed");
+                                }
                             } else {
-                                System.out.println("Out of stock: " + movie.getTitle());
+                                //if movie stock is 0 then out of stock alert pops up
+                                alert("Movie is out Stock", "Rental Failed");
                             }
                         });
                     }
-
+                    //places the button objects that were created inside the cell
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -116,7 +148,14 @@ public class mainPageController implements Initializable
                 };
             }
         };
-
+        //sets the rent column cell factory to the cellfactory object we created
         rentCol.setCellFactory(cellFactory);
+    }
+    private void alert(String message, String title) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -1,64 +1,43 @@
 package com.example.cs157proj.model;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 
 public class DatabaseController {
 
-    private Statement statement;
+    private Connection connection;
+    private ConnectDB connectDB;
     public DatabaseController() {
-        ConnectDB db = new ConnectDB(); //create an object for connecting to our databse
-        Connection connection = db.getConnection(); //gets connection from our ConnectDB Object
-        if (connection != null) { //if the database is connected create movie, customer, rental, and rating tables
-            try {
-                 statement = connection.createStatement();
-                String movieTable = "CREATE TABLE IF NOT EXISTS movie (movieID INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
-                        "title VARCHAR(50), genre VARCHAR(50), stock INTEGER, avgRating DECIMAL (1,1))";
-                 String customerTable = "CREATE TABLE IF NOT EXISTS customer (username VARCHAR(10) UNIQUE NOT NULL PRIMARY KEY, " +
-                        "password VARCHAR(50), name VARCHAR(50), age INTEGER)";
-                 String rentalTable = "CREATE TABLE IF NOT EXISTS rental (username VARCHAR(10) NOT NULL, " +
-                         "movieID INTEGER NOT NULL, dueDate VARCHAR(50), PRIMARY KEY (username, movieID))";
-                String ratingTable = "CREATE TABLE IF NOT EXISTS rating (username VARCHAR(10) NOT NULL, " +
-                        "movieID INTEGER NOT NULL, rating DECIMAL (1,1), PRIMARY KEY (username, movieID))";
-                 createTable(movieTable);
-                 createTable(customerTable);
-                 createTable(rentalTable);
-                 createTable(ratingTable);
-                 String m1 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
-                         "VALUES (12345, 'Thunderbolts', 'Action', 3, 5.0)";
-                String m2 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
-                        "VALUES (23456, 'Sinners', 'Horror', 2, 5.0)";
-                String m3 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
-                        "VALUES (34567, 'Wicked', 'Fantasy', 4, 4.5)";
-                String m4 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
-                        "VALUES (45678, 'Ted', 'Comedy', 2, 3.0)";
-                String m5 = "INSERT OR IGNORE INTO movie(movieID, title, genre, stock, avgRating) " +
-                        "VALUES (56789, 'La La Land', 'Romance', 1, 5.0)";
-                insertMovie(m1);
-                insertMovie(m2);
-                insertMovie(m3);
-                insertMovie(m4);
-                insertMovie(m5);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        connectDB = new ConnectDB();
+        connection = connectDB.getConnection();
+        try {
+            initialzeDatabase("CS157Proj/src/main/resources/SQL Files/create_schema.sql");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-    public void createTable(String createTable) { //use statement to create table from SQL statement in string
-        try {
-            statement.executeUpdate(createTable);
+
+    public void initialzeDatabase(String path) throws IOException {
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("SQL Files/create_schema.sql");
+        if (inputStream == null) {
+            throw new FileNotFoundException("SQL file not found in resources.");
+        }
+        String sql = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        String[] qeuries = sql.split(";");
+        try{
+            Statement statement = connection.createStatement();
+            for(String query : qeuries){
+                query = query.trim();
+                statement.executeUpdate(query);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-    }
-    public void insertMovie(String insertMovie) { //use statement to insert into movie table using SQL statement from string
-       try{
-           statement.executeUpdate(insertMovie);
-       } catch (SQLException e) {
-           throw new RuntimeException(e);
-       }
-    }
-    public void insertCustomer(String insertCustomer) {
-
     }
 }
 

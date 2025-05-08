@@ -4,10 +4,14 @@ public class Rental {
     private String username;
     private int movieID;
     private String dueDate;
-    public Rental(String username, int movieID, String dueDate){
+    private String title;
+
+    public Rental(String username, int movieID, String dueDate) {
         this.username = username;
         this.movieID = movieID;
         this.dueDate = dueDate;
+        DataHandler dataHandler = new DataHandler();
+        this.title = dataHandler.getRentalTitle(movieID);
     }
 
     public String getUsername() {
@@ -22,7 +26,6 @@ public class Rental {
         return dueDate;
     }
 
-//    public String getMovieTitle(){
-//
-//    }
+    public String getTitle() {return title;}
+
 }
