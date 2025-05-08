@@ -14,6 +14,14 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
+import java.io.IOException;
 
 public class mainPageController implements Initializable
 {
@@ -157,5 +165,20 @@ public class mainPageController implements Initializable
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void logOut(ActionEvent event) throws IOException {
+        // Clear the current user
+        // usernameHolder.getInstance().clearUsername();
+        System.out.println("Trying to log out");
+        // Navigate back to the welcome page
+        Parent welcomePage = FXMLLoader.load(getClass().getResource("/com/example/cs157proj/welcome-page.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(welcomePage));
+        stage.show();
+
+        // Print a message for confirmation
+        System.out.println("Logged out successfully");
     }
 }

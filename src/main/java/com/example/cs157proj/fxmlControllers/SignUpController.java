@@ -66,6 +66,7 @@ public class SignUpController {
 
         //sets usernameController to signed-in username so it can be used in other pages
         user.setUsername(username);
+        System.out.println(user.getUsername() + " is signed in.");
 
         // After successful sign-up, navigate to main-page.fxml
         try {

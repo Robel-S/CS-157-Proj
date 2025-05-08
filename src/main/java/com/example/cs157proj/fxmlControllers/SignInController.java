@@ -40,10 +40,11 @@ public class SignInController {
         if (customer != null) {
             // If the customer exists
             // Show a success message or navigate to the next screen (if needed)
-            showSuccess("Account created successfully!");
+            showSuccess("Account signed into successfully!");
 
             //sets usernameController to signed-in username so it can be used in other pages
             user.setUsername(username);
+            System.out.println(user.getUsername() + " is signed in.");
 
             // navigate to the main-page.fxml
             navigateToMainPage();
