@@ -22,7 +22,7 @@ public class Rental {
         return dueDate;
     }
 
-    public String getMovieTitle(){
-
-    }
+//    public String getMovieTitle(){
+//
+//    }
 }
