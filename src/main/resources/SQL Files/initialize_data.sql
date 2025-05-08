@@ -1,5 +1,5 @@
-INSERT INTO movie(movieID, title, genre, stock, avgRating)
-VALUES(123456, 'Movie1', 'Action', 3, 5.0),
+INSERT OR IGNORE INTO movie (movieID, title, genre, stock, avgRating)
+VALUES (123456, 'Movie1', 'Action', 3, 5.0),
 (234567, 'Movie2', 'Fantasy', 2, 4.0),
 (345678, 'Movie3', 'Romance', 3, 5.0),
 (456789, 'Movie4', 'Comedy', 0, 1.0),

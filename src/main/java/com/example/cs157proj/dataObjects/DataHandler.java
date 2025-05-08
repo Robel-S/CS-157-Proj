@@ -50,7 +50,7 @@ public class DataHandler {
         ArrayList<String> genres = new ArrayList<>();
         try {
             //query to get all genres from movie table
-            ResultSet resultSet = statement.executeQuery("SELECT genre FROM movie ORDER BY genre");
+            ResultSet resultSet = statement.executeQuery("SELECT DISTINCT genre FROM movie ORDER BY genre");
             while (resultSet.next()) {
                 //adds each genre to an arraylist one by one from resultSet
                 genres.add(resultSet.getString("genre"));
