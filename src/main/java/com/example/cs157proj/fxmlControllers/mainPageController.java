@@ -130,7 +130,6 @@ public class mainPageController implements Initializable
                             if (movie.getStock() > 0) {
                                 if(dataHandler.rentalExists(username.getUsername(), movie.getMovieID())) {
                                     if(dataHandler.insertRental(username.getUsername(), movie.getMovieID())) {
-                                        rentBtn.setText("Rented");
                                         alert("Rented " + movie.getTitle(), "rental succesful");
                                     }
                                     else {

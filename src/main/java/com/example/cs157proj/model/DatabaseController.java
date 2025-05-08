@@ -15,12 +15,12 @@ public class DatabaseController {
         connectDB = new ConnectDB();
         connection = connectDB.getConnection();
         try {
-            initialzeDatabase("CS157Proj/src/main/resources/SQL Files/create_schema.sql");
+            initialzeDatabase("SQL Files/create_schema.sql");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            initialzeDatabase("CS157Proj/src/main/resources/SQL Files/initialize_data.sql");
+            initialzeDatabase("SQL Files/initialize_data.sql");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -28,7 +28,7 @@ public class DatabaseController {
 
     public void initialzeDatabase(String path) throws IOException {
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("SQL Files/create_schema.sql");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
         if (inputStream == null) {
             throw new FileNotFoundException("SQL file not found in resources.");
         }
