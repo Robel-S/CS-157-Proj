@@ -17,7 +17,7 @@
          </font>
       </Label>
       <TextField fx:id="searchBox" layoutX="7.0" layoutY="115.0" onAction="#searchMovies" prefHeight="26.0" prefWidth="483.0" text="Search for a movie" />
-      <ChoiceBox fx:id="genreFilter" layoutX="490.0" layoutY="115.0" prefHeight="26.0" prefWidth="109.0" scaleShape="false" onAction = "#genreFilter">
+      <ChoiceBox fx:id="genreFilter" layoutX="490.0" layoutY="115.0" onAction="#genreFilter" prefHeight="26.0" prefWidth="109.0" scaleShape="false">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -29,10 +29,11 @@
       </Label>
       <TableView fx:id="movieTable" layoutY="191.0" prefHeight="210.0" prefWidth="600.0">
         <columns>
-          <TableColumn fx:id="titleCol" prefWidth="265.60003662109375" text="Title" />
-          <TableColumn fx:id="genreCol" minWidth="0.0" prefWidth="192.79998779296875" text="Genre" />
-            <TableColumn fx:id="stockCol" prefWidth="64.0" text="Stock" />
-            <TableColumn fx:id="ratingCol" prefWidth="77.5999755859375" text="Rating" />
+          <TableColumn fx:id="titleCol" prefWidth="186.4000244140625" text="Title" />
+          <TableColumn fx:id="genreCol" minWidth="0.0" prefWidth="136.0" text="Genre" />
+            <TableColumn fx:id="stockCol" prefWidth="115.199951171875" text="Stock" />
+            <TableColumn fx:id="ratingCol" prefWidth="96.0" text="Rating" />
+            <TableColumn fx:id="rentCol" prefWidth="63.20001220703125" text="Rent" />
         </columns>
       </TableView>
    </children>

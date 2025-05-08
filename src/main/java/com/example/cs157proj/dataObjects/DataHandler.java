@@ -51,6 +51,33 @@ public class DataHandler {
         }
         return genres;
     }
+    public static ArrayList<Rental> loadUserRentals(String username){
+        ArrayList<Rental> rentals = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
+            while (resultSet.next()) {
+                int movieID = resultSet.getInt("movieID");
+                String user = resultSet.getString("username");
+                String dueDate = resultSet.getString("dueDate");
+                rentals.add(new Rental(user, movieID, dueDate));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rentals;
+    }
+    public static void updateStock(int movieID){
+        String query = "UPDATE movie SET stock = stock - 1 WHERE movieID = " + movieID;
+        try{
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void rentalTitle(int movieID){
+
+
+    }
 
     // Method to add a new customer to the database
     public void addCustomer(Customer customer) {
@@ -115,6 +142,7 @@ public class DataHandler {
             return false;
         }
     }
+
 
 
 

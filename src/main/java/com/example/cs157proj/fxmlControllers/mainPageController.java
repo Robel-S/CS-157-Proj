@@ -7,11 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TextField;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,6 +27,8 @@ public class mainPageController implements Initializable
     private TableColumn<Movie, Double> ratingCol;
     @FXML
     private TableColumn<Movie, Integer> stockCol;
+    @FXML
+    private TableColumn<Movie, Void> rentCol;
     @FXML
     private TextField searchBox;
     @FXML
@@ -49,15 +49,17 @@ public class mainPageController implements Initializable
         movies = dataHandler.loadMovies();
         genres = dataHandler.loadGenres();
         loadMovies();
+        addButtons();
         filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         loadGenres();
         genreFilter();
     }
     public void loadMovies(){
-
-        movieTable.getItems().addAll(movies);
+        movies = dataHandler.loadMovies();
+            movieTable.setItems(FXCollections.observableArrayList(movies));
     }
     public void loadGenres(){
+        genreFilter.getItems().clear();
         genreFilter.getItems().addAll(genres);
         genreFilter.getItems().addFirst("Choose Genre");
         genreFilter.setValue("Choose Genre");
@@ -85,5 +87,36 @@ public class mainPageController implements Initializable
             }
         });
         movieTable.setItems(filteredGenres);
+    }
+    private void addButtons() {
+        Callback<TableColumn<Movie, Void>, TableCell<Movie, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Movie, Void> call(final TableColumn<Movie, Void> param) {
+                return new TableCell<>() {
+                    private final Button rentBtn = new Button("Rent");
+
+                    {
+                        rentBtn.setOnAction(event -> {
+                            Movie movie = getTableView().getItems().get(getIndex());
+                            if (movie.getStock() > 0) {
+                                rentBtn.setText("Rented");
+                                dataHandler.updateStock(movie.getMovieID());
+                                loadMovies();
+                            } else {
+                                System.out.println("Out of stock: " + movie.getTitle());
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setGraphic(empty ? null : rentBtn);
+                    }
+                };
+            }
+        };
+
+        rentCol.setCellFactory(cellFactory);
     }
 }
