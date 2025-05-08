@@ -25,10 +25,6 @@ public class rentalPageController {
 
     private ArrayList<Rental> rentals;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        dueDateCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-    }
+
 
 }
