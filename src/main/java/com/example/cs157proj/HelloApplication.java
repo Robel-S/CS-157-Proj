@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         DatabaseController main = new DatabaseController();
-        Scene scene = getMainScene();
+        Scene scene = getWelcomeScene();
         stage.setTitle("FilmBox!");
         stage.setScene(scene);
         stage.show();
@@ -26,11 +26,16 @@ public class HelloApplication extends Application {
         mainScene = new Scene(fxmlLoader.load(), 600, 400);
         return mainScene;
     }
-    public Scene getIDScene() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("id-page.fxml"));
-        idScene = new Scene(fxmlLoader.load(), 600, 400);
-        return idScene;
+    public Scene getWelcomeScene() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("welcome-page.fxml"));
+        mainScene = new Scene(fxmlLoader.load(), 600, 400);
+        return mainScene;
     }
+//    public Scene getIDScene() throws IOException{
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("id-page.fxml"));
+//        idScene = new Scene(fxmlLoader.load(), 600, 400);
+//        return idScene;
+//    }
     public static void main(String[] args) {
         launch();
     }
