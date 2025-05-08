@@ -71,6 +71,36 @@ public class DataHandler {
         }
     }
 
+    public Customer getCustomerByUsernameAndPassword(String username, String password) {
+        Customer customer = null;
+
+        // Database query to check if username and password exist
+        String sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set the parameters (username and password) in the query
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            // Execute the query
+            ResultSet resultSet = stmt.executeQuery();
+
+            // If a record is found, create a Customer object
+            if (resultSet.next()) {
+                System.out.println("Customer found!");
+                String name = resultSet.getString("name");
+                int age = resultSet.getInt("age");
+
+                // Create and return the Customer object
+                customer = new Customer(username, password, name, age);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
     // New method to validate customer credentials
     public boolean validateCustomer(String username, String password) {
         String sql = "SELECT * FROM customers WHERE username = ? AND password = ?";
