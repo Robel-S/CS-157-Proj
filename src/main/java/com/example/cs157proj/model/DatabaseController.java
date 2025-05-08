@@ -19,6 +19,11 @@ public class DatabaseController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try {
+            initialzeDatabase("CS157Proj/src/main/resources/SQL Files/initialize_data.sql");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void initialzeDatabase(String path) throws IOException {
