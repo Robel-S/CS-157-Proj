@@ -37,6 +37,7 @@
             <TableColumn fx:id="rentCol" prefWidth="63.20001220703125" text="Rent" />
         </columns>
       </TableView>
-      <Button fx:id="logOutButton" layoutX="527.0" layoutY="23.0" mnemonicParsing="false" text="Log out" onAction="#logOut"/>
+      <Button fx:id="logOutButton" layoutX="22.0" layoutY="23.0" mnemonicParsing="false" onAction="#logOut" text="Log out" />
+      <Button fx:id="rentalsPage" layoutX="507.0" layoutY="23.0" mnemonicParsing="false" onAction="#navigateToRentalPage" text="My Rentals" />
    </children>
 </Pane>

@@ -180,4 +180,14 @@ public class mainPageController implements Initializable
         // Print a message for confirmation
         System.out.println("Logged out successfully");
     }
+
+    @FXML
+    public void navigateToRentalPage(ActionEvent event) throws IOException {
+        System.out.println("Trying to log out");
+        Parent rentalPage = FXMLLoader.load(getClass().getResource("/com/example/cs157proj/rental-page.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(rentalPage));
+        stage.show();
+
+    }
 }
