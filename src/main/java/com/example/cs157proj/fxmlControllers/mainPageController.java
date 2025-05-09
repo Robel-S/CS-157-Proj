@@ -99,15 +99,17 @@ public class mainPageController implements Initializable
      * then the table gets set to show the items in the filteredList
      */
     public void genreFilter(){
-        FilteredList<Movie> filteredGenres = new FilteredList<Movie>(FXCollections.observableArrayList(filteredMovies));
         genreFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals("Choose Genre"))
-                filteredGenres.setPredicate(p-> true);
+            if (newValue.equals("Choose Genre")) {
+                loadMovies();
+                movieTable.setItems(FXCollections.observableArrayList(movies));
+            }
             else {
-                filteredGenres.setPredicate(genre -> genre.getGenre().equals(newValue));
+                movies = dataHandler.loadMoviesByGenre(newValue);
+                movieTable.setItems(FXCollections.observableArrayList(movies));
+
             }
         });
-        movieTable.setItems(filteredGenres);
     }
     //code to add rent buttons to the last column of the table
     private void addButtons() {
