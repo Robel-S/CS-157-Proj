@@ -34,27 +34,49 @@ public class SignInController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // Validate that no field is empty
+        if (username.isEmpty() || password.isEmpty()) {
+            showError("Please fill all the fields.");
+            return;
+        }
+
+        // Validate username length
+        if (username.length() > 10) {
+            showError("Username must be 10 characters or less.");
+            return;
+        }
+
+        // Validate password length
+        if (password.length() > 50) {
+            showError("Password must be 50 characters or less.");
+            return;
+        }
+
         // Call the method to get customer by username and password
         Customer customer = dataHandler.getCustomerByUsernameAndPassword(username, password);
 
         // Check if customer exists
         if (customer != null) {
-            // If the customer exists
-            // Show a success message or navigate to the next screen (if needed)
+            // If the customer exists, show a success message and navigate to the main page
             showSuccess("Account signed into successfully!");
 
-            //sets usernameController to signed-in username so it can be used in other pages
+            // Set username in the singleton
             user.setUsername(username);
             System.out.println(user.getUsername() + " is signed in.");
 
-            // navigate to the main-page.fxml
-            navigateToMainPage();
+            // Navigate to the main-page.fxml
+            try {
+                navigateToMainPage();
+            } catch (IOException e) {
+                System.err.println("Error loading main-page.fxml: " + e.getMessage());
+                showError("Failed to load the main page. Please try again.");
+            }
         } else {
             showError("Invalid username or password!");
-            System.out.println("customer was null");
-            System.out.println("Username we got: " + customer.getUsername() + ", pasword: " + customer.getPassword());
+            System.out.println("Customer not found for username: " + username);
         }
     }
+
 
     // Navigate to the main-page.fxml
     private void navigateToMainPage() throws IOException {

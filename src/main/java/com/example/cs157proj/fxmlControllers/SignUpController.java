@@ -42,18 +42,40 @@ public class SignUpController {
         String password = passwordField.getText();
         String ageText = ageField.getText();
 
-        // Validate that age is a valid integer
-        int age = 0;
-        try {
-            age = Integer.parseInt(ageText);
-        } catch (NumberFormatException e) {
-            showError("Age must be a valid number");
+        // Validate that no field is empty
+        if (username.isEmpty() || name.isEmpty() || password.isEmpty() || ageText.isEmpty()) {
+            showError("Please fill all the fields.");
             return;
         }
 
-        // Ensure the fields are not empty
-        if (username.isEmpty() || name.isEmpty() || password.isEmpty() || ageText.isEmpty()) {
-            showError("Please fill all the fields.");
+        // Validate username length
+        if (username.length() > 10) {
+            showError("Username must be 10 characters or less.");
+            return;
+        }
+
+        // Validate name length
+        if (name.length() > 20) {
+            showError("Name must be 20 characters or less.");
+            return;
+        }
+
+        // Validate password length
+        if (password.length() > 50) {
+            showError("Password must be 50 characters or less.");
+            return;
+        }
+
+        // Validate age is an integer and within range
+        int age;
+        try {
+            age = Integer.parseInt(ageText);
+            if (age < 1 || age > 200) {
+                showError("Age must be between 1 and 200.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showError("Age must be a valid number.");
             return;
         }
 
@@ -63,10 +85,10 @@ public class SignUpController {
         // Insert the customer into the database using DataHandler
         dataHandler.addCustomer(newCustomer);
 
-        // Show a success message or navigate to the next screen (if needed)
+        // Show a success message
         showSuccess("Account created successfully!");
 
-        //sets usernameController to signed-in username so it can be used in other pages
+        // Set the username in the singleton
         user.setUsername(username);
         System.out.println(user.getUsername() + " is signed in.");
 
@@ -74,11 +96,11 @@ public class SignUpController {
         try {
             navigateToMainPage();
         } catch (IOException e) {
-            // Handle the IOException if loading the main-page.fxml fails
             System.err.println("Error loading main-page.fxml: " + e.getMessage());
-            // Optionally, you can show a user-friendly message to the user here
+            showError("Failed to load the main page. Please try again.");
         }
     }
+
 
     private void navigateToMainPage() throws IOException {
         // Load the main-page.fxml
