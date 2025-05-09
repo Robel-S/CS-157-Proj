@@ -38,6 +38,6 @@
         </columns>
       </TableView>
       <Button fx:id="logOutButton" layoutX="22.0" layoutY="23.0" mnemonicParsing="false" onAction="#logOut" text="Log out" />
-      <Button fx:id="rentalsPage" layoutX="507.0" layoutY="23.0" mnemonicParsing="false" onAction="#navigateToRentalPage" text="My Rentals" />
+      <Button fx:id="rentalsPage" layoutX="507.0" layoutY="23.0" mnemonicParsing="false" onAction="#navigateToRentalPage" text="My Rentals" /><Button fx:id="rateMovieButton" layoutX="507.0" layoutY="60.0" mnemonicParsing="false" onAction="#navigateToRatingPage" text="Rate Movie" />
    </children>
 </Pane>

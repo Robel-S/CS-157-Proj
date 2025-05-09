@@ -193,4 +193,17 @@ public class mainPageController implements Initializable
         stage.show();
 
     }
+
+    @FXML // method to navigate to ratings page
+    private void navigateToRatingPage(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cs157proj/rating-page.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
