@@ -31,20 +31,22 @@ public class rentalPageController implements Initializable {
     private final usernameHolder username = usernameHolder.getInstance();
     private ArrayList<Rental> rentals;
 
-    @Override
+    @Override //on page start the rentalTable is populated with values from the rental table in the database
     public void initialize(URL location, ResourceBundle resources){
         dataHandler = new DataHandler();
+        //assigns each column an attribute to take in from the rental objects
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         dueDateCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         loadRentals();
         addButtons();
 
     }
+    //populates rental tables with the existing rentals of the current user that is logged in
     public void loadRentals(){
         rentals = dataHandler.loadUserRentals(username.getUsername());
         rentalTable.setItems(FXCollections.observableArrayList(rentals));
     }
-    //code to add return buttons to the last column of the table
+    //method to add return buttons to the last column of the table
     private void addButtons() {
         //creates cell factory object that defines how the column is set up
         //specifies that column will hold a movie object and wont display a specific datatype hence void
@@ -57,7 +59,9 @@ public class rentalPageController implements Initializable {
                     private final Button returnBtn = new Button("Return");
                     {
                         returnBtn.setOnAction(event -> {
+                            //when return button is pressed gets the rental object of the row the button is in
                             Rental rental = getTableView().getItems().get(getIndex());
+                            //calls methode to delete specific rental and allerts the user if the delte was succesful or not
                             if(dataHandler.deleteRental(rental.getUsername(),rental.getMovieID())){
                                 alert("return succesful", "SUCESS");
                             }
@@ -76,9 +80,10 @@ public class rentalPageController implements Initializable {
                 };
             }
         };
-        //sets the rent column cell factory to the cellfactory object we created
+        //sets the return column cell factory to the cellfactory object we created
         returnCol.setCellFactory(cellFactory);
     }
+    //method to create an Alert with the given message and title
     private void alert(String message, String title) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

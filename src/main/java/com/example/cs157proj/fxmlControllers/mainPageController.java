@@ -158,6 +158,7 @@ public class mainPageController implements Initializable
         //sets the rent column cell factory to the cellfactory object we created
         rentCol.setCellFactory(cellFactory);
     }
+    //method to create an Alert with the given message and title
     private void alert(String message, String title) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -183,7 +184,6 @@ public class mainPageController implements Initializable
 
     @FXML //method to navigate to rental page
     public void navigateToRentalPage(ActionEvent event) throws IOException {
-
         Parent rentalPage = FXMLLoader.load(getClass().getResource("/com/example/cs157proj/rental-page.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(rentalPage));

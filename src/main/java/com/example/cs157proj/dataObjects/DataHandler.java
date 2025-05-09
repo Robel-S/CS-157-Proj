@@ -71,11 +71,14 @@ public class DataHandler {
         }
         return genres;
     }
+    //stores the rentals of a specific user in an Array and returns it
     public ArrayList<Rental> loadUserRentals(String username){
         ArrayList<Rental> rentals = new ArrayList<>();
         try {
+            //query to get all rentals from the rental table that have a given username
             ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
             while (resultSet.next()) {
+                //adds each rental into an ArrayList one by one from the resultSet
                 int movieID = resultSet.getInt("movieID");
                 String dueDate = resultSet.getString("dueDate");
                 rentals.add(new Rental(username, movieID, dueDate));
@@ -87,13 +90,16 @@ public class DataHandler {
         return rentals;
     }
 
+    //method to see if user has already rented a specific movie
     public boolean rentalExists(String username, int movieID){
+        //query to get row from rental table with a specfic username and movieID
         String query = "SELECT * FROM rental WHERE username = ? AND movieID = ?";
         try{
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, username);
             stmt.setInt(2, movieID);
             ResultSet rs = stmt.executeQuery();
+            //checks if the resultSet has a row if it does that means the user has already rented the movie and returns true
             if(!rs.next()){
                 return true;
             }
@@ -101,28 +107,36 @@ public class DataHandler {
             System.out.println("error checking rental");
             throw new RuntimeException(e);
         }
+        //if the resultSet doesnt have a row it means that the user hasn't rented the movie and returns false
         return false;
     }
+    //inserts a row into the rentalTable based on given username and movieID and substracts the stock from that movie
     public boolean insertRental(String username, int movieID){
-        String query = "INSERT INTO rental(username, movieID, dueDate) VALUES (?,?,?)";
-        String query2 = "UPDATE movie SET stock = stock - 1 WHERE movieID = ?";
+        //inserts a row into the rental table based on given values
+        String update = "INSERT INTO rental(username, movieID, dueDate) VALUES (?,?,?)";
+        //subtracts one from the stock of a movie based on given movieID
+        String update2 = "UPDATE movie SET stock = stock - 1 WHERE movieID = ?";
+        //creates a date variable that stores a date two wekks away from the curent date
         LocalDate twoWeeks = date.plusWeeks(2);
         try{
-            PreparedStatement stmt = connection.prepareStatement(query);
-            PreparedStatement stmt2 = connection.prepareStatement(query2);
+            PreparedStatement stmt = connection.prepareStatement(update);
+            PreparedStatement stmt2 = connection.prepareStatement(update2);
             stmt.setString(1, username);
             stmt.setInt(2, movieID);
             stmt.setString(3, twoWeeks.toString());
             stmt2.setInt(1, movieID);
+            //sets auto commit to false and executes 2 updates and commits only if both of them go through
             connection.setAutoCommit(false);
             stmt.executeUpdate();
             stmt2.executeUpdate();
             connection.commit();
+            //sets autocommit back to true and returns true if transaction goes through
             connection.setAutoCommit(true);
             return true;
 
         } catch (SQLException e) {
             try {
+                //rolls back updates if one of them fails, sets auto commit to true then returns false
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
@@ -132,7 +146,9 @@ public class DataHandler {
             }
         }
     }
+    //gets title of movie from a rental's movieID
     public String getRentalTitle(int movieID){
+        //query to get title of a movie based on the given movieID
         String query = "SELECT title FROM movie WHERE movieID = ?";
         String title = "empty";
         try {
@@ -140,6 +156,7 @@ public class DataHandler {
             stmt.setInt(1, movieID);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
+                //since movieID is a primary key in the movie table only one row is returned which is stored in title and returned
                 title = rs.getString("title");
             }
         } catch (SQLException e) {
@@ -150,7 +167,9 @@ public class DataHandler {
     }
     //Method to delete a rental from the Database
     public boolean deleteRental(String username, int movieID){
+        //deletes a row in the rental table based on given values
         String update = "DELETE FROM rental WHERE username = ? AND movieID = ?";
+        //subtracts one from the stock of a movie based on given movieID
         String update2 = "UPDATE movie SET stock = stock + 1 WHERE movieID = ?";
         try{
             PreparedStatement statement=  connection.prepareStatement(update);
@@ -158,14 +177,17 @@ public class DataHandler {
             statement.setString(1, username);
             statement.setInt(2, movieID);
             statement2.setInt(1, movieID);
+            //sets auto commit to false and executes 2 updates and commits only if both of them go through
             connection.setAutoCommit(false);
             statement.executeUpdate();
             statement2.executeUpdate();
             connection.commit();
+            //sets autocommit back to true and returns true if transaction goes through
             connection.setAutoCommit(true);
             return true;
         } catch (SQLException e) {
             try {
+                //rolls back updates if one of them fails, sets auto commit to true then returns false
                 connection.rollback();
                 connection.setAutoCommit(true);
                 System.out.println(e.getMessage());

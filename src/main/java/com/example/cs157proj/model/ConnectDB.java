@@ -5,8 +5,10 @@ public class ConnectDB {
 
     private static Connection connection;
 
+    //method to get connection to SQLite database
     public static Connection getConnection(){
         final String dbName = "jdbc:sqlite:RentalDB.db";
+        //checks if we already have a connection before making a new one
         if(connection == null) {
             try {
                 connection = DriverManager.getConnection(dbName);
@@ -19,6 +21,7 @@ public class ConnectDB {
         return connection;
     }
 
+    //closes connection to the database
     public static void closeConnection(){
         try{
             if(connection != null) {
