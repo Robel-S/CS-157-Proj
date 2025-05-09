@@ -15,7 +15,7 @@ public class Movie {
             this.avgRating = "N/A";
         }
         else{
-            this.avgRating = String.format("%.2f", avgRating);
+            this.avgRating = String.format("%.1f", avgRating);
         }
     }
 

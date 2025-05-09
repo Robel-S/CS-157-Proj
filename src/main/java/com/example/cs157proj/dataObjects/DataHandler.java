@@ -97,8 +97,8 @@ public class DataHandler {
     public ArrayList<Rental> loadUserRentals(String username){
         ArrayList<Rental> rentals = new ArrayList<>();
         try {
-            //query to get all rentals from the rental table that have a given username
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
+            //query to get all rentals from the rental table that have a given username ordered by due date
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "' ORDER BY dueDate");
             while (resultSet.next()) {
                 //adds each rental into an ArrayList one by one from the resultSet
                 int movieID = resultSet.getInt("movieID");
