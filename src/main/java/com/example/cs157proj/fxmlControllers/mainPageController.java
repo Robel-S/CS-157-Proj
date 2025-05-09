@@ -63,7 +63,7 @@ public class mainPageController implements Initializable
         filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         loadGenres();
         genreFilter();
-
+        searchMovies();
     }
     //loads arraylist of movies from database and gives them to the table
     public void loadMovies(){
