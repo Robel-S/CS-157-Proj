@@ -362,4 +362,18 @@ public class DataHandler {
             throw new RuntimeException("Error updating average rating", e);
         }
     }
+
+    // Checks if a user has already rated a specific movie
+    public boolean hasUserRatedMovie(String username, int movieID) {
+        String query = "SELECT 1 FROM rating WHERE username = ? AND movieID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.setInt(2, movieID);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // true if there's already a rating
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking if user has rated movie", e);
+        }
+    }
+
 }

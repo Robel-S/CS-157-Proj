@@ -39,5 +39,9 @@ public class Movie {
         return avgRating;
     }
 
+    public String toString() {
+        return getTitle();
+    }
+
 
 }

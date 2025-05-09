@@ -6,6 +6,12 @@
 
 <Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs157proj.fxmlControllers.ratingPageController">
     <children>
+        <Label layoutX="225.0" layoutY="40.0" text="Add a Rating">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+
         <ComboBox fx:id="movieComboBox" layoutX="200.0" layoutY="100.0" prefWidth="200.0" />
         <Text layoutX="100.0" layoutY="120.0" text="Select Movie:" />
 
@@ -17,4 +23,5 @@
 
         <Button layoutX="14.0" layoutY="14.0" text="Back" onAction="#goBack" />
     </children>
+
 </Pane>

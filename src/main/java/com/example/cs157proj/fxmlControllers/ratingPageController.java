@@ -49,12 +49,20 @@ public class ratingPageController {
 
         double rating = ratingSpinner.getValue();
         String username = usernameHolder.getInstance().getUsername();
+
+        // Safety check to ensure the user hasn’t already rated this movie
+        if (dataHandler.hasUserRatedMovie(username, selectedMovie.getMovieID())) {
+            statusLabel.setText("You have already rated this movie.");
+            return;
+        }
+
         dataHandler.submitRating(username, selectedMovie.getMovieID(), rating);
         statusLabel.setText("Rating submitted successfully!");
 
-        // Refresh the list
+        // Remove the rated movie from the ComboBox
         movieComboBox.getItems().remove(selectedMovie);
     }
+
 
     @FXML
     public void goBack(ActionEvent event) {
