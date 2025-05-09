@@ -68,6 +68,29 @@ public class DataHandler {
         //returns array of movie objects
         return movies;
     }
+    public ArrayList<Movie> loadMoviesBySearch(String search) {
+        updateMovies();
+        ArrayList<Movie> movies = new ArrayList<>();
+        try {
+            //query to load all attributes from movie table that have a specified genre in order by title attribute
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM movie WHERE title LIKE '%" + search +"%' ORDER BY title");
+            while (resultSet.next()) {
+                //each attribute gets put in a variable then stored in a movie object an added to a movie array
+                int movieID = resultSet.getInt("movieID"); //gets movieID column from current row
+                String movieTitle = resultSet.getString("title");
+                String genre = resultSet.getString("genre");
+                int stock = resultSet.getInt("stock");
+                double avgRating = resultSet.getDouble("avgRating");
+                movies.add(new Movie(movieID, movieTitle, genre, stock, avgRating));
+            }
+        } catch (SQLException e) {
+            System.out.println("error loading movies");
+            throw new RuntimeException(e);
+        }
+        //returns array of movie objects
+        return movies;
+    }
+
     public void updateMovies() {
         String query  = "UPDATE movie SET avgRating = COALESCE((SELECT AVG(r.rating) FROM rating r WHERE r.movieID = movie.movieID), -1);";
         try{

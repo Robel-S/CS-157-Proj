@@ -45,7 +45,6 @@ public class mainPageController implements Initializable
     private DataHandler dataHandler;
     private ArrayList<Movie> movies;
     private ArrayList<String> genres;
-    private FilteredList<Movie> filteredMovies;
     private final usernameHolder username = usernameHolder.getInstance();
 
     @Override //on page start up table gets populated with the values from our movie database
@@ -59,8 +58,6 @@ public class mainPageController implements Initializable
         stockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         loadMovies();
         addButtons();
-        //creates a filteredList based on the ArrayList of movies
-        filteredMovies = new FilteredList<Movie>(FXCollections.observableArrayList(movies),p -> true);
         loadGenres();
         genreFilter();
         searchMovies();
@@ -78,27 +75,23 @@ public class mainPageController implements Initializable
         // genreFilter.getItems().addFirst("Choose Genre");
         genreFilter.setValue("Choose Genre");
     }
-    /*reads values inputted into the searchbar and compares the new value to the titles
-    * of the movies in the movie ArrayList and those that match get filtered into the filteredList
-    * and the table gets set to show the items in the filteredList
-     */
+    /*reads values inputted into the searchbar and sends out a query to get movies with titles that match
+    the inputted values which comes back to use in the form on an ArrayList which we load into the display table*/
     public void searchMovies(){
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredMovies.setPredicate(movie -> {
-                if(newValue == null || newValue.isEmpty())
-                    return true;
-                String lowerCaseFilter = newValue.toLowerCase();
-                if(movie.getTitle().toLowerCase().contains(lowerCaseFilter))
-                    return true;
-                else return false;
-            });
+           if(newValue.isEmpty()){
+               movies = dataHandler.loadMovies();
+               movieTable.setItems(FXCollections.observableArrayList(movies));
+           }
+           else{
+               movies = dataHandler.loadMoviesBySearch(newValue);
+               movieTable.setItems(FXCollections.observableArrayList(movies));
+            }
         });
-        movieTable.setItems(filteredMovies);
     }
-    /* whenever a genre is chosen in the genreFilter choicebox we compare that genre
-     * to the genres of the movies in our movieArrayList and those that match stay in the FilteredList
-     * then the table gets set to show the items in the filteredList
-     */
+    /* whenever a genre is chosen in the genreFilter choicebox we check out what the new genre is and send out a query
+    to only get movies in that genre and it comes back to us in the form of an ArrayList which we load into the display
+    table */
     public void genreFilter(){
         genreFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("Choose Genre")) {
