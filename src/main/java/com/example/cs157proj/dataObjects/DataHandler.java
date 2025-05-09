@@ -18,12 +18,14 @@ public class DataHandler {
         try {
             statement = connection.createStatement();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     // Existing method for loading movies
-    public static ArrayList<Movie> loadMovies() {
+    public ArrayList<Movie> loadMovies() {
+        updateMovies();
         ArrayList<Movie> movies = new ArrayList<>();
         try {
             //query to load all attributes from movie table in order by title attribute
@@ -44,9 +46,39 @@ public class DataHandler {
         //returns array of movie objects
         return movies;
     }
-
+    public ArrayList<Movie> loadMoviesByGenre(String genre) {
+        updateMovies();
+        ArrayList<Movie> movies = new ArrayList<>();
+        try {
+            //query to load all attributes from movie table that have a specified genre in order by title attribute
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM movie WHERE genre = '" + genre +"' ORDER BY title");
+            while (resultSet.next()) {
+                //each attribute gets put in a variable then stored in a movie object an added to a movie array
+                int movieID = resultSet.getInt("movieID"); //gets movieID column from current row
+                String movieTitle = resultSet.getString("title");
+                genre = resultSet.getString("genre");
+                int stock = resultSet.getInt("stock");
+                double avgRating = resultSet.getDouble("avgRating");
+                movies.add(new Movie(movieID, movieTitle, genre, stock, avgRating));
+            }
+        } catch (SQLException e) {
+            System.out.println("error loading movies");
+            throw new RuntimeException(e);
+        }
+        //returns array of movie objects
+        return movies;
+    }
+    public void updateMovies() {
+        String query  = "UPDATE movie SET avgRating = COALESCE((SELECT AVG(r.rating) FROM rating r WHERE r.movieID = movie.movieID), -1);";
+        try{
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            System.out.println("error updating movie");
+            throw new RuntimeException(e);
+        }
+    }
     // Existing method for loading genres
-    public static ArrayList<String> loadGenres() {
+    public ArrayList<String> loadGenres() {
         ArrayList<String> genres = new ArrayList<>();
         try {
             //query to get all genres from movie table
@@ -61,72 +93,84 @@ public class DataHandler {
         }
         return genres;
     }
-    public static ArrayList<Rental> loadUserRentals(String username){
+    //stores the rentals of a specific user in an Array and returns it
+    public ArrayList<Rental> loadUserRentals(String username){
         ArrayList<Rental> rentals = new ArrayList<>();
         try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
+            //query to get all rentals from the rental table that have a given username ordered by due date
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "' ORDER BY dueDate");
             while (resultSet.next()) {
+                //adds each rental into an ArrayList one by one from the resultSet
                 int movieID = resultSet.getInt("movieID");
                 String dueDate = resultSet.getString("dueDate");
                 rentals.add(new Rental(username, movieID, dueDate));
             }
         } catch (SQLException e) {
+            System.out.println("error loading user rentals");
             throw new RuntimeException(e);
         }
         return rentals;
     }
-    public static void updateStock(int movieID){
-        String query = "UPDATE movie SET stock = stock - 1 WHERE movieID = " + movieID;
-        try{
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
+    //method to see if user has already rented a specific movie
     public boolean rentalExists(String username, int movieID){
+        //query to get row from rental table with a specfic username and movieID
         String query = "SELECT * FROM rental WHERE username = ? AND movieID = ?";
         try{
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, username);
             stmt.setInt(2, movieID);
             ResultSet rs = stmt.executeQuery();
+            //checks if the resultSet has a row if it does that means the user has already rented the movie and returns true
             if(!rs.next()){
                 return true;
             }
         } catch (SQLException e) {
+            System.out.println("error checking rental");
             throw new RuntimeException(e);
         }
+        //if the resultSet doesnt have a row it means that the user hasn't rented the movie and returns false
         return false;
     }
+    //inserts a row into the rentalTable based on given username and movieID and substracts the stock from that movie
     public boolean insertRental(String username, int movieID){
-        String query = "INSERT INTO rental(username, movieID, dueDate) VALUES (?,?,?)";
-        String query2 = "UPDATE movie SET stock = stock - 1 WHERE movieID = ?";
+        //inserts a row into the rental table based on given values
+        String update = "INSERT INTO rental(username, movieID, dueDate) VALUES (?,?,?)";
+        //subtracts one from the stock of a movie based on given movieID
+        String update2 = "UPDATE movie SET stock = stock - 1 WHERE movieID = ?";
+        //creates a date variable that stores a date two wekks away from the curent date
         LocalDate twoWeeks = date.plusWeeks(2);
         try{
-            PreparedStatement stmt = connection.prepareStatement(query);
-            PreparedStatement stmt2 = connection.prepareStatement(query2);
+            PreparedStatement stmt = connection.prepareStatement(update);
+            PreparedStatement stmt2 = connection.prepareStatement(update2);
             stmt.setString(1, username);
             stmt.setInt(2, movieID);
             stmt.setString(3, twoWeeks.toString());
             stmt2.setInt(1, movieID);
+            //sets auto commit to false and executes 2 updates and commits only if both of them go through
             connection.setAutoCommit(false);
             stmt.executeUpdate();
             stmt2.executeUpdate();
             connection.commit();
+            //sets autocommit back to true and returns true if transaction goes through
             connection.setAutoCommit(true);
             return true;
 
         } catch (SQLException e) {
             try {
+                //rolls back updates if one of them fails, sets auto commit to true then returns false
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
             } catch (SQLException ex) {
+                System.out.println("rollback failed");
                 throw new RuntimeException(ex);
             }
         }
     }
+    //gets title of movie from a rental's movieID
     public String getRentalTitle(int movieID){
+        //query to get title of a movie based on the given movieID
         String query = "SELECT title FROM movie WHERE movieID = ?";
         String title = "empty";
         try {
@@ -134,12 +178,47 @@ public class DataHandler {
             stmt.setInt(1, movieID);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
+                //since movieID is a primary key in the movie table only one row is returned which is stored in title and returned
                 title = rs.getString("title");
             }
         } catch (SQLException e) {
+            System.out.println("error getting rental title");
             throw new RuntimeException(e);
         }
         return title;
+    }
+    //Method to delete a rental from the Database
+    public boolean deleteRental(String username, int movieID){
+        //deletes a row in the rental table based on given values
+        String update = "DELETE FROM rental WHERE username = ? AND movieID = ?";
+        //subtracts one from the stock of a movie based on given movieID
+        String update2 = "UPDATE movie SET stock = stock + 1 WHERE movieID = ?";
+        try{
+            PreparedStatement statement=  connection.prepareStatement(update);
+            PreparedStatement statement2=  connection.prepareStatement(update2);
+            statement.setString(1, username);
+            statement.setInt(2, movieID);
+            statement2.setInt(1, movieID);
+            //sets auto commit to false and executes 2 updates and commits only if both of them go through
+            connection.setAutoCommit(false);
+            statement.executeUpdate();
+            statement2.executeUpdate();
+            connection.commit();
+            //sets autocommit back to true and returns true if transaction goes through
+            connection.setAutoCommit(true);
+            return true;
+        } catch (SQLException e) {
+            try {
+                //rolls back updates if one of them fails, sets auto commit to true then returns false
+                connection.rollback();
+                connection.setAutoCommit(true);
+                System.out.println(e.getMessage());
+                return false;
+            } catch (SQLException ex) {
+                System.out.println("rollback failed");
+                throw new RuntimeException(ex);
+            }
+        }
     }
     // Method to add a new customer to the database
     public void addCustomer(Customer customer) {
@@ -205,6 +284,10 @@ public class DataHandler {
         }
     }
 
+
+    public void closeConnection() {
+        db.closeConnection();
+    }
     // Get list of movies the user rented but hasn't rated yet
     public ArrayList<Movie> getUnratedRentedMovies(String username) {
         ArrayList<Movie> movies = new ArrayList<>();
@@ -256,7 +339,4 @@ public class DataHandler {
             throw new RuntimeException("Error updating average rating", e);
         }
     }
-
-
-
 }

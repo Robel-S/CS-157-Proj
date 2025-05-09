@@ -17,7 +17,7 @@
             <Font size="35.0" />
          </font>
       </Label>
-      <TextField fx:id="searchBox" layoutX="7.0" layoutY="115.0" onAction="#searchMovies" prefHeight="26.0" prefWidth="483.0" text="Search for a movie" />
+      <TextField fx:id="searchBox" layoutX="7.0" layoutY="115.0" prefHeight="26.0" prefWidth="483.0" text="Search for a movie" />
       <ChoiceBox fx:id="genreFilter" layoutX="490.0" layoutY="115.0" onAction="#genreFilter" prefHeight="26.0" prefWidth="109.0" scaleShape="false">
          <opaqueInsets>
             <Insets />

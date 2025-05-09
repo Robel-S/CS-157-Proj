@@ -5,13 +5,18 @@ public class Movie {
     private String title;
     private String genre;
     private int stock;
-    private double avgRating;
+    private String avgRating;
     public Movie(int movieID, String title, String genre, int stock, double avgRating) {
         this.movieID = movieID;
         this.title = title;
         this.genre = genre;
         this.stock = stock;
-        this.avgRating = avgRating;
+        if(avgRating == -1){
+            this.avgRating = "N/A";
+        }
+        else{
+            this.avgRating = String.format("%.1f", avgRating);
+        }
     }
 
     public int getMovieID() {
@@ -30,7 +35,7 @@ public class Movie {
         return stock;
     }
 
-    public double getAvgRating() {
+    public String getAvgRating() {
         return avgRating;
     }
 

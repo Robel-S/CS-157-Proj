@@ -3,24 +3,26 @@ import java.sql.*;
 
 public class ConnectDB {
 
-    private Connection connection;
+    private static Connection connection;
 
-    public ConnectDB(){
+    //method to get connection to SQLite database
+    public static Connection getConnection(){
         final String dbName = "jdbc:sqlite:RentalDB.db";
-        try{
-            connection = DriverManager.getConnection(dbName);
-            System.out.println("Connected to database");
-        } catch (SQLException e) {
-            System.out.println("Error connecting to database");
-            e.printStackTrace();
+        //checks if we already have a connection before making a new one
+        if(connection == null) {
+            try {
+                connection = DriverManager.getConnection(dbName);
+                System.out.println("Connected to database");
+            } catch (SQLException e) {
+                System.out.println("Error connecting to database");
+                e.printStackTrace();
+            }
         }
-    }
-
-    public Connection getConnection(){
         return connection;
     }
 
-    public void closeConnection(){
+    //closes connection to the database
+    public static void closeConnection(){
         try{
             if(connection != null) {
                 connection.close();
