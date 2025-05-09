@@ -37,10 +37,11 @@
       </Text>
 
       <!-- Sign-In Button -->
-      <Button fx:id="signInButton" layoutX="257.0" layoutY="266.0" mnemonicParsing="false" text="Sign in" onAction="#signIn">
+      <Button fx:id="signInButton" layoutX="257.0" layoutY="266.0" mnemonicParsing="false" onAction="#signIn" text="Sign in">
          <font>
             <Font size="19.0" />
          </font>
       </Button>
+      <Button fx:id="backButton" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" text="Back" onAction="#goBack"/>
    </children>
 </Pane>

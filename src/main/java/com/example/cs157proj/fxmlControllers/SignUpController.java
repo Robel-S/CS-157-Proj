@@ -2,7 +2,9 @@ package com.example.cs157proj.fxmlControllers;
 
 import com.example.cs157proj.dataObjects.Customer;
 import com.example.cs157proj.dataObjects.DataHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert;
@@ -107,4 +109,13 @@ public class SignUpController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    public void goBack(ActionEvent event) throws IOException {
+        Parent welcomePage = FXMLLoader.load(getClass().getResource("/com/example/cs157proj/welcome-page.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(welcomePage));
+        stage.show();
+    }
+
 }
