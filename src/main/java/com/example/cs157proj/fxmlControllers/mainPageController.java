@@ -48,7 +48,7 @@ public class mainPageController implements Initializable
     private FilteredList<Movie> filteredMovies;
     private final usernameHolder username = usernameHolder.getInstance();
 
-    @Override //on page start up table gets populated with the values from our movie databse
+    @Override //on page start up table gets populated with the values from our movie database
     public void initialize(URL location, ResourceBundle resources){
         //creates data handler object to handle data from database
         dataHandler = new DataHandler();
@@ -72,9 +72,10 @@ public class mainPageController implements Initializable
     }
     //loads arraylist of genres and puts them into our genreFilterBox
     public void loadGenres(){
+        genreFilter.getItems().add("Choose Genre");
         genres = dataHandler.loadGenres();
         genreFilter.setItems(FXCollections.observableArrayList(genres));
-        genreFilter.getItems().addFirst("Choose Genre");
+        // genreFilter.getItems().addFirst("Choose Genre");
         genreFilter.setValue("Choose Genre");
     }
     /*reads values inputted into the searchbar and compares the new value to the titles
