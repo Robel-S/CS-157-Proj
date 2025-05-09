@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?> <!-- Import PasswordField -->
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
+<!-- Import PasswordField -->
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs157proj.fxmlControllers.SignUpController">
    <children>
@@ -28,7 +30,7 @@
       </Text>
       <Text layoutX="175.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username must be less than 10 characters." wrappingWidth="289.21630859375" />
       <Text layoutX="175.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password must be less than 50 characters." wrappingWidth="289.21630859375" />
-      <Button fx:id="createAccountButton" layoutX="246.0" layoutY="288.0" mnemonicParsing="false" text="Create account" onAction="#signUp">
+      <Button fx:id="createAccountButton" layoutX="246.0" layoutY="288.0" mnemonicParsing="false" onAction="#signUp" text="Create account">
          <font>
             <Font size="19.0" />
          </font>
@@ -46,5 +48,6 @@
          </font>
       </Text>
       <Text layoutX="177.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Age must be an integer. Everything else a string." wrappingWidth="289.21630859375" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Back" onAction="#goBack"/>
    </children>
 </Pane>

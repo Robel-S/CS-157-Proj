@@ -284,7 +284,59 @@ public class DataHandler {
         }
     }
 
+
     public void closeConnection() {
         db.closeConnection();
+    }
+    // Get list of movies the user rented but hasn't rated yet
+    public ArrayList<Movie> getUnratedRentedMovies(String username) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        String query = "SELECT m.* FROM movie m " +
+                "JOIN rental r ON m.movieID = r.movieID " +
+                "WHERE r.username = ? AND NOT EXISTS (" +
+                "SELECT 1 FROM rating rt WHERE rt.username = ? AND rt.movieID = m.movieID)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.setString(2, username);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                movies.add(new Movie(
+                        rs.getInt("movieID"),
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getInt("stock"),
+                        rs.getDouble("avgRating")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching unrated rented movies", e);
+        }
+        return movies;
+    }
+
+    // Submit a rating
+    public void submitRating(String username, int movieID, double rating) {
+        String insert = "INSERT INTO rating (username, movieID, rating) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(insert)) {
+            stmt.setString(1, username);
+            stmt.setInt(2, movieID);
+            stmt.setDouble(3, rating);
+            stmt.executeUpdate();
+            updateAverageRating(movieID);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error submitting rating", e);
+        }
+    }
+
+    // Update average rating after new rating submitted
+    private void updateAverageRating(int movieID) {
+        String update = "UPDATE movie SET avgRating = (SELECT ROUND(AVG(rating), 1) FROM rating WHERE movieID = ?) WHERE movieID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(update)) {
+            stmt.setInt(1, movieID);
+            stmt.setInt(2, movieID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating average rating", e);
+        }
     }
 }
