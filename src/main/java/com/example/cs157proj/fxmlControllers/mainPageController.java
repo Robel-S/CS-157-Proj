@@ -32,7 +32,7 @@ public class mainPageController implements Initializable
     @FXML
     private TableColumn<Movie, String> genreCol;
     @FXML
-    private TableColumn<Movie, Double> ratingCol;
+    private TableColumn<Movie, String> ratingCol;
     @FXML
     private TableColumn<Movie, Integer> stockCol;
     @FXML
@@ -111,7 +111,7 @@ public class mainPageController implements Initializable
     }
     //code to add rent buttons to the last column of the table
     private void addButtons() {
-        //creates cell factory object that defines how the column is set up set up
+        //creates cell factory object that defines how the column is set up
         //specifies that column will hold a movie object and wont display a specific datatype hence void
         Callback<TableColumn<Movie, Void>, TableCell<Movie, Void>> cellFactory = new Callback<>() {
             //calls following code once for each row the table has
@@ -181,9 +181,9 @@ public class mainPageController implements Initializable
         System.out.println("Logged out successfully");
     }
 
-    @FXML
+    @FXML //method to navigate to rental page
     public void navigateToRentalPage(ActionEvent event) throws IOException {
-        System.out.println("Trying to log out");
+
         Parent rentalPage = FXMLLoader.load(getClass().getResource("/com/example/cs157proj/rental-page.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(rentalPage));

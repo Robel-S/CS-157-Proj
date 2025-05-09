@@ -1,24 +1,28 @@
 CREATE TABLE IF NOT EXISTS movie(
 movieID INTEGER UNIQUE NOT NULL PRIMARY KEY,
-title VARCHAR(50),
-genre VARCHAR(20),
-stock INTEGER,
-avgRating DECIMAL (1,1));
+title VARCHAR(50) NOT NULL,
+genre VARCHAR(20) NOT NULL,
+stock INTEGER NOT NULL,
+avgRating DECIMAL (1,1) NOT NULL);
 
 CREATE TABLE IF NOT EXISTS customer(
 username VARCHAR(10) UNIQUE NOT NULL PRIMARY KEY,
-password VARCHAR(50),
-name VARCHAR(50),
-age INTEGER);
+password VARCHAR(20) NOT NULL,
+name VARCHAR(20) NOT NULL,
+age INTEGER NOT NULL);
 
 CREATE TABLE IF NOT EXISTS rental(
 username VARCHAR(10) NOT NULL,
 movieID INTEGER NOT NULL, 
-dueDate VARCHAR(50),
-PRIMARY KEY (username, movieID));
+dueDate VARCHAR(20) NOT NULL,
+PRIMARY KEY (username, movieID),
+FOREIGN KEY(username) REFERENCES customer(username),
+FOREIGN KEY(movieID) REFERENCES movie(movieID));
 
 CREATE TABLE IF NOT EXISTS rating(
 username VARCHAR(10) NOT NULL,
 movieID INTEGER NOT NULL,
-rating DECIMAL(1,1),
-PRIMARY KEY (username, movieID));
+rating DECIMAL(1,1) NOT NULL,
+PRIMARY KEY (username, movieID),
+FOREIGN KEY(username) REFERENCES customer(username),
+FOREIGN KEY(movieID) REFERENCES movie(movieID));

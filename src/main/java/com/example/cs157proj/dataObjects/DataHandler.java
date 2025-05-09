@@ -18,12 +18,14 @@ public class DataHandler {
         try {
             statement = connection.createStatement();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     // Existing method for loading movies
-    public static ArrayList<Movie> loadMovies() {
+    public ArrayList<Movie> loadMovies() {
+        updateMovies();
         ArrayList<Movie> movies = new ArrayList<>();
         try {
             //query to load all attributes from movie table in order by title attribute
@@ -44,9 +46,17 @@ public class DataHandler {
         //returns array of movie objects
         return movies;
     }
-
+    public void updateMovies() {
+        String query  = "UPDATE movie SET avgRating = COALESCE((SELECT AVG(r.rating) FROM rating r WHERE r.movieID = movie.movieID), -1);";
+        try{
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            System.out.println("error updating movie");
+            throw new RuntimeException(e);
+        }
+    }
     // Existing method for loading genres
-    public static ArrayList<String> loadGenres() {
+    public ArrayList<String> loadGenres() {
         ArrayList<String> genres = new ArrayList<>();
         try {
             //query to get all genres from movie table
@@ -61,7 +71,7 @@ public class DataHandler {
         }
         return genres;
     }
-    public static ArrayList<Rental> loadUserRentals(String username){
+    public ArrayList<Rental> loadUserRentals(String username){
         ArrayList<Rental> rentals = new ArrayList<>();
         try {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM rental WHERE username = '" + username + "'");
@@ -71,18 +81,12 @@ public class DataHandler {
                 rentals.add(new Rental(username, movieID, dueDate));
             }
         } catch (SQLException e) {
+            System.out.println("error loading user rentals");
             throw new RuntimeException(e);
         }
         return rentals;
     }
-    public static void updateStock(int movieID){
-        String query = "UPDATE movie SET stock = stock - 1 WHERE movieID = " + movieID;
-        try{
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     public boolean rentalExists(String username, int movieID){
         String query = "SELECT * FROM rental WHERE username = ? AND movieID = ?";
         try{
@@ -94,6 +98,7 @@ public class DataHandler {
                 return true;
             }
         } catch (SQLException e) {
+            System.out.println("error checking rental");
             throw new RuntimeException(e);
         }
         return false;
@@ -122,6 +127,7 @@ public class DataHandler {
                 connection.setAutoCommit(true);
                 return false;
             } catch (SQLException ex) {
+                System.out.println("rollback failed");
                 throw new RuntimeException(ex);
             }
         }
@@ -137,9 +143,38 @@ public class DataHandler {
                 title = rs.getString("title");
             }
         } catch (SQLException e) {
+            System.out.println("error getting rental title");
             throw new RuntimeException(e);
         }
         return title;
+    }
+    //Method to delete a rental from the Database
+    public boolean deleteRental(String username, int movieID){
+        String update = "DELETE FROM rental WHERE username = ? AND movieID = ?";
+        String update2 = "UPDATE movie SET stock = stock + 1 WHERE movieID = ?";
+        try{
+            PreparedStatement statement=  connection.prepareStatement(update);
+            PreparedStatement statement2=  connection.prepareStatement(update2);
+            statement.setString(1, username);
+            statement.setInt(2, movieID);
+            statement2.setInt(1, movieID);
+            connection.setAutoCommit(false);
+            statement.executeUpdate();
+            statement2.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                System.out.println(e.getMessage());
+                return false;
+            } catch (SQLException ex) {
+                System.out.println("rollback failed");
+                throw new RuntimeException(ex);
+            }
+        }
     }
     // Method to add a new customer to the database
     public void addCustomer(Customer customer) {
@@ -205,7 +240,7 @@ public class DataHandler {
         }
     }
 
-
-
-
+    public void closeConnection() {
+        db.closeConnection();
+    }
 }
