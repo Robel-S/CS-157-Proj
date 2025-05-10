@@ -5,6 +5,9 @@ In the main folder you have the java and resources folder. In the resources fold
 
 ### Instructions for setting up and running the project
 Make sure the your project SDK is using OpenJDK 21.0.7 and that you add your JDBC SQLite driver (version mentioned in Dependencies and required software) to wherever your IDE stores them. In order to load the application you need to run the start up class, start up uses the initialize method in DataHandler to set up the tables and populate them using the create_schema and initialize_data sql files and then sets the scene to the welcome page.
+
+If you are using intellij on the right there is a database tab if you click on it there is a create data source button if you choose create data source from path you can make RentalDB.db your data source and if you do that a pop will appear asking you to choose a driver for it. You can choose SQLite as your driver and a window called data source and drivers will popup. Near the bottom of the window IntelliJ will prompt you to download the missing drivers and it will download and apply the SQLite drivers for you 
+
 ### Dependencies and required software
 JDK 21.0.7, Java FX SDK 21.0.7, SQLite, Xerial JDBC SQLite driver ver 3.45.1.0, javafx.controls, javafx.fxml, java.sql, sqlite browser like DB Browser if your IDE does not have a built in one
 
