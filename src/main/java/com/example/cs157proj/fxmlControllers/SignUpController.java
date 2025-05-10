@@ -32,7 +32,7 @@ public class SignUpController {
     public SignUpController() {
         dataHandler = new DataHandler();
     }
-    private final usernameHolder user = usernameHolder.getInstance();
+    private final UsernameHolder user = UsernameHolder.getInstance();
 
     @FXML
     public void signUp() {

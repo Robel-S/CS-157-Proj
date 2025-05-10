@@ -1,7 +1,6 @@
 package com.example.cs157proj;
 
 import com.example.cs157proj.dataObjects.DataHandler;
-import com.example.cs157proj.model.DatabaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class Startup extends Application {
 
     private Scene mainScene;
     private Scene idScene;
@@ -24,12 +23,12 @@ public class HelloApplication extends Application {
         stage.show();
     }
     public Scene getMainScene() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-page.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Startup.class.getResource("main-page.fxml"));
         mainScene = new Scene(fxmlLoader.load(), 600, 400);
         return mainScene;
     }
     public Scene getWelcomeScene() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("welcome-page.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Startup.class.getResource("welcome-page.fxml"));
         mainScene = new Scene(fxmlLoader.load(), 600, 400);
         return mainScene;
     }

@@ -26,7 +26,7 @@ public class SignInController {
     public SignInController() {
         dataHandler = new DataHandler();
     }
-    private final usernameHolder user = usernameHolder.getInstance();
+    private final UsernameHolder user = UsernameHolder.getInstance();
 
     @FXML
     public void signIn(ActionEvent event) throws IOException {

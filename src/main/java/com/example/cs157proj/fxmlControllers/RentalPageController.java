@@ -1,7 +1,6 @@
 package com.example.cs157proj.fxmlControllers;
 
 import com.example.cs157proj.dataObjects.DataHandler;
-import com.example.cs157proj.dataObjects.Movie;
 import com.example.cs157proj.dataObjects.Rental;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -19,7 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class rentalPageController implements Initializable {
+public class RentalPageController implements Initializable {
     @FXML
     private TableView<Rental> rentalTable;
 
@@ -33,7 +32,7 @@ public class rentalPageController implements Initializable {
     private TableColumn<Rental, Void> returnCol;
 
     private DataHandler dataHandler;
-    private final usernameHolder username = usernameHolder.getInstance();
+    private final UsernameHolder username = UsernameHolder.getInstance();
     private ArrayList<Rental> rentals;
 
     @Override //on page start the rentalTable is populated with values from the rental table in the database

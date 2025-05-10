@@ -1,11 +1,11 @@
 package com.example.cs157proj.fxmlControllers;
 
-public final class usernameHolder {
+public final class UsernameHolder {
     private String username;
-    private final static usernameHolder instance = new usernameHolder();
-    private usernameHolder() {}
+    private final static UsernameHolder instance = new UsernameHolder();
+    private UsernameHolder() {}
 
-    public static usernameHolder getInstance() {
+    public static UsernameHolder getInstance() {
         return instance;
     }
     public String getUsername() {

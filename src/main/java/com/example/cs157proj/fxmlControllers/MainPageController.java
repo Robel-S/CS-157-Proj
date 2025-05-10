@@ -4,7 +4,6 @@ import com.example.cs157proj.dataObjects.Movie;
 import com.example.cs157proj.dataObjects.DataHandler;
 
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,7 +13,7 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,7 +22,7 @@ import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 
-public class mainPageController implements Initializable
+public class MainPageController implements Initializable
 {
     @FXML
     private TableView<Movie> movieTable;
@@ -45,7 +44,7 @@ public class mainPageController implements Initializable
     private DataHandler dataHandler;
     private ArrayList<Movie> movies;
     private ArrayList<String> genres;
-    private final usernameHolder username = usernameHolder.getInstance();
+    private final UsernameHolder username = UsernameHolder.getInstance();
 
     @Override //on page start up table gets populated with the values from our movie database
     public void initialize(URL location, ResourceBundle resources){

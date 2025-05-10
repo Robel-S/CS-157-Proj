@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class ratingPageController {
+public class RatingPageController {
 
     @FXML
     private ComboBox<Movie> movieComboBox;
@@ -29,7 +29,7 @@ public class ratingPageController {
 
     @FXML
     public void initialize() {
-        String username = usernameHolder.getInstance().getUsername();
+        String username = UsernameHolder.getInstance().getUsername();
         ArrayList<Movie> unratedMovies = dataHandler.getUnratedRentedMovies(username);
         ObservableList<Movie> movieList = FXCollections.observableArrayList(unratedMovies);
         movieComboBox.setItems(movieList);
@@ -48,7 +48,7 @@ public class ratingPageController {
         }
 
         double rating = ratingSpinner.getValue();
-        String username = usernameHolder.getInstance().getUsername();
+        String username = UsernameHolder.getInstance().getUsername();
 
         // Safety check to ensure the user hasn’t already rated this movie
         if (dataHandler.hasUserRatedMovie(username, selectedMovie.getMovieID())) {
