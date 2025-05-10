@@ -1,5 +1,6 @@
 package com.example.cs157proj;
 
+import com.example.cs157proj.dataObjects.DataHandler;
 import com.example.cs157proj.model.DatabaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        DatabaseController main = new DatabaseController();
+        DataHandler dataHandler = new DataHandler();
+        dataHandler.initialize();
         Scene scene = getWelcomeScene();
         stage.setTitle("FilmBox!");
         stage.setScene(scene);

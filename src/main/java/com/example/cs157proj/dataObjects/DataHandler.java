@@ -1,6 +1,8 @@
 package com.example.cs157proj.dataObjects;
 
 import com.example.cs157proj.model.ConnectDB;
+import com.example.cs157proj.model.DatabaseController;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +24,10 @@ public class DataHandler {
             throw new RuntimeException(e);
         }
     }
-
+    //creates database and initializes schema files
+    public void initialize(){
+        DatabaseController databaseController = new DatabaseController();
+    }
     // Existing method for loading movies
     public ArrayList<Movie> loadMovies() {
         updateMovies();
